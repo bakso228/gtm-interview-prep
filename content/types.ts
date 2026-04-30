@@ -17,6 +17,11 @@ export type QuestionCategory =
 
 export type Difficulty = "easy" | "medium" | "hard";
 
+export type SampleQuestion = {
+  question: string;
+  answerThemes: string[];
+};
+
 export type Concept = {
   id: string;
   title: string;
@@ -24,6 +29,7 @@ export type Concept = {
   definition: string;
   whyItMatters: string;
   interviewAngle: string;
+  sampleQuestions?: SampleQuestion[];
   related?: string[];
   example?: string;
 };

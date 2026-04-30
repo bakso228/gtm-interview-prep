@@ -14,6 +14,33 @@ const concepts: Concept[] = [
     related: ["ai-safety-gtm", "anthropic-competitive", "anthropic-verticals"],
     example:
       "A German insurance firm evaluating AI for claims processing cares less about Claude's MMLU score and more about: Can we audit its decisions? Will it hallucinate policy numbers? Where does our data go? That's Claude's turf.",
+    sampleQuestions: [
+      {
+        question:
+          "How would you pitch Claude's enterprise value proposition to a German bank's CDO who has already evaluated OpenAI?",
+        answerThemes: [
+          "Lead with business risk reduction, not model benchmarks",
+          "Safety and auditability directly address CDO's liability concerns",
+          "No training on customer data — critical for banking data confidentiality",
+          "Long-context (200K tokens) for processing full loan files in one pass",
+          "Constitutional AI produces more predictable, explainable outputs",
+          "Acknowledge OpenAI's brand strength — reframe the evaluation criteria",
+          "Offer a targeted POC on a real use case (e.g., regulatory report summarization)",
+        ],
+      },
+      {
+        question:
+          "What are the three axes of Claude's enterprise positioning, and which one resonates most with regulated-industry buyers?",
+        answerThemes: [
+          "Three axes: capability, safety, trust",
+          "Safety resonates most: Constitutional AI, documented behavior, reduced hallucinations",
+          "Trust layer: no training on customer data, enterprise-grade security, data residency",
+          "Capability still matters but should anchor to outcomes — 'summarize your 500-page contract in 30 seconds'",
+          "Regulated buyers (FS, healthcare) have compliance teams who must approve AI vendors",
+          "Safety documentation is actual procurement collateral — not just a talking point",
+        ],
+      },
+    ],
   },
   {
     id: "ai-safety-gtm",
@@ -26,6 +53,34 @@ const concepts: Concept[] = [
     interviewAngle:
       "Could come up as: 'How do you think about AI safety, and how does Anthropic's position on it resonate with you?' or 'How does safety become a sales argument vs. becoming a conversation-stopper?' Show you can connect safety to business risk, not just ethics. The CISO cares about liability; the CEO cares about brand risk; the CDO cares about model reliability.",
     related: ["claude-enterprise-positioning", "anthropic-competitive", "dach-market"],
+    sampleQuestions: [
+      {
+        question:
+          "How would you translate Anthropic's AI safety research into a compelling argument for a CISO evaluating enterprise AI vendors?",
+        answerThemes: [
+          "CISOs care about liability, auditability, and predictable behavior — not ethics abstractions",
+          "Constitutional AI = model trained to follow principles → fewer unexpected harmful outputs",
+          "Documented model behavior makes security review tractable vs. black-box competitors",
+          "No training on customer data removes a major data-breach risk vector",
+          "EU AI Act compliance: Anthropic's safety posture maps directly to high-risk AI requirements",
+          "Concrete: 'Here's our security whitepaper and data processing agreement' — not theoretical",
+          "Offer to include Anthropic's safety team in a technical deep-dive with their security architects",
+        ],
+      },
+      {
+        question:
+          "How does the EU AI Act create GTM urgency for Anthropic in DACH, and how would you use it in a sales conversation?",
+        answerThemes: [
+          "EU AI Act enters force 2026 — high-risk AI uses (FS, healthcare) face mandatory compliance",
+          "Creates urgency: enterprises must demonstrate AI systems are safe and auditable",
+          "Anthropic's safety-first positioning is a compliance asset, not just a differentiator",
+          "Position Anthropic as the 'compliance-ready' AI platform vs. move-fast competitors",
+          "Use with procurement teams and legal/compliance stakeholders, not just IT",
+          "Avoid overselling — know which use cases are actually classified as high-risk",
+          "Pair with legal team resources or a compliance FAQ to make procurement easier",
+        ],
+      },
+    ],
   },
   {
     id: "anthropic-competitive",
@@ -40,6 +95,34 @@ const concepts: Concept[] = [
     related: ["claude-enterprise-positioning", "ai-safety-gtm", "competitive-enablement"],
     example:
       "Claude's long-context window (200K tokens) and documented safety properties are concrete advantages over GPT-4o for financial document analysis. A pitch that leads with 'we can process your entire loan file in one pass with auditable outputs' beats a feature-by-feature comparison.",
+    sampleQuestions: [
+      {
+        question:
+          "A large German manufacturer is already deep in the Microsoft ecosystem and evaluating Azure OpenAI. How do you win — or co-exist?",
+        answerThemes: [
+          "Don't fight the Microsoft relationship — frame as complementary, not competing",
+          "Azure OpenAI has Claude available on Bedrock too — open the conversation around best model for each task",
+          "Claude's advantages: longer context, stronger reasoning on unstructured docs, better safety posture",
+          "For manufacturing use cases (technical docs, quality procedures, supply chain), long-context matters",
+          "Find the champion outside IT — often a COO or Head of Operations with a specific pain point",
+          "A side-by-side POC on a real document-analysis task beats a slide deck",
+          "If you can't win the full account, win a beachhead use case and expand",
+        ],
+      },
+      {
+        question:
+          "OpenAI is cutting price aggressively in two of your top DACH accounts. How do you respond?",
+        answerThemes: [
+          "Don't immediately match on price — diagnose whether this is a price problem or a value problem",
+          "Engage your executive sponsor: 'What's driving the re-evaluation — cost pressure or new requirements?'",
+          "Reframe evaluation criteria: total cost of ownership includes failed outputs, compliance rework, vendor lock-in",
+          "Claude's safety and auditability have quantifiable risk value — especially in regulated accounts",
+          "Escalate to Anthropic leadership if strategic account — executive-to-executive engagement",
+          "Understand the competitor's offer: feature-by-feature or bundle pricing?",
+          "If price is the real issue, explore multi-year commitment or expanded scope in exchange for better terms",
+        ],
+      },
+    ],
   },
   {
     id: "api-vs-enterprise-gtm",
@@ -52,6 +135,34 @@ const concepts: Concept[] = [
     interviewAngle:
       "Could come up as: 'How do you think about Anthropic's dual GTM motion?' or 'A large bank's data team is already using the API — how do you convert that to an enterprise deal?' Show you understand that the developer motion creates warm leads, not just potential channel conflict.",
     related: ["gtm-motion-types", "claude-enterprise-positioning", "market-segmentation"],
+    sampleQuestions: [
+      {
+        question:
+          "A large DACH bank's data science team has been using the Claude API for 3 months on an internal project. How do you convert this to an enterprise deal?",
+        answerThemes: [
+          "Developer usage is a warm signal — treat it as a SQLed inbound, not cold outreach",
+          "Map the internal champion: who's paying the API bill? Who approved the pilot?",
+          "Understand the use case: internal-only or customer-facing? Scale ambitions?",
+          "Trigger: when developers want to go to production, enterprise requirements kick in (SLA, DPA, security review)",
+          "Introduce enterprise value: data privacy guarantee, dedicated support, custom rate limits, no training on data",
+          "Find the economic buyer — often IT leadership or CDO, not the data team",
+          "Design a transition path: 'We can migrate your existing usage to an enterprise agreement with zero disruption'",
+        ],
+      },
+      {
+        question:
+          "How would you design a lead routing model that distinguishes API self-serve accounts from enterprise opportunities in DACH?",
+        answerThemes: [
+          "Firmographic triggers: company size >1,000 employees, revenue >€500M → route to enterprise AE",
+          "Usage signals: spending >€X/month on API, or specific use case categories (customer-facing, regulated data)",
+          "Intent signals: contact from a non-engineering persona (IT director, CDO, procurement) on the API account",
+          "SLA or data privacy inquiry → automatic enterprise qualification flag",
+          "Build a shared CRM view: API accounts visible to enterprise AEs for named accounts",
+          "Define clear handoff SLA: AE must engage within 48h of trigger",
+          "Avoid over-routing: not every API user is enterprise-ready — create a qualification checklist",
+        ],
+      },
+    ],
   },
   {
     id: "dach-market",
@@ -66,6 +177,34 @@ const concepts: Concept[] = [
     related: ["procurement-legal", "anthropic-verticals", "territory-design", "ai-safety-gtm"],
     example:
       "Swiss banks require that AI training data and inference happen within Swiss borders. This immediately filters to providers with Swiss data centers — something to know before qualifying an account, not after signing the NDA.",
+    sampleQuestions: [
+      {
+        question:
+          "What are the top three differences between enterprise AI sales in DACH vs. the US, and how do they shape your GTM approach?",
+        answerThemes: [
+          "1. Data sovereignty: GDPR + EU AI Act make data residency a procurement requirement — not optional",
+          "2. Procurement culture: longer, more formal, risk-averse — expect 6–12 month cycles, more legal stakeholders",
+          "3. Trust-first buying culture: German enterprises buy from vendors with local presence, references, and longevity",
+          "Implication: qualify for data residency compatibility before investing in a deal",
+          "Implication: invest early in executive relationships — decisions are made by committees, not champions alone",
+          "Implication: develop local case studies and German-language materials — US-only references don't land",
+          "Mittelstand is huge in volume but harder to scale — focus enterprise resources on FS, telco, large tech first",
+        ],
+      },
+      {
+        question:
+          "How does the EU AI Act change your year-1 GTM priorities for DACH, and how would you use it in a sales conversation?",
+        answerThemes: [
+          "EU AI Act classifies high-risk AI (FS, healthcare, HR decisions) — those buyers face mandatory compliance",
+          "Create urgency: 'You need an auditable, compliant AI partner before enforcement begins'",
+          "Anthropic's safety posture is a compliance asset — Constitutional AI, documented model behavior",
+          "Prioritize high-risk AI use cases in your ICP: credit scoring, insurance underwriting, clinical decision support",
+          "Build compliance collateral: data processing agreement, model cards, security whitepaper",
+          "Partner with legal/compliance advisory firms who are already working with these buyers",
+          "Avoid overpromising: know which Anthropic use cases are high-risk vs. limited-risk under the Act",
+        ],
+      },
+    ],
   },
   {
     id: "anthropic-verticals",
@@ -80,6 +219,34 @@ const concepts: Concept[] = [
     related: ["vertical-gtm", "icp", "dach-market", "claude-enterprise-positioning"],
     example:
       "A German private bank running AI on Anthropic for regulatory reporting summarization is a 10/10 case study: high ACV, replicable use case, genuine Claude advantage (long-context document analysis + safe outputs). Finding that account and packaging it into a vertical play is your year-1 priority.",
+    sampleQuestions: [
+      {
+        question:
+          "How would you prioritize DACH verticals for year 1 at Anthropic, and what framework would you use to make that decision?",
+        answerThemes: [
+          "Framework: score each vertical on 4 axes — deal size/ACV, ICP density, regulatory tailwind, Anthropic's competitive advantage",
+          "Year-1 priority: Financial Services — highest ACV, strongest Claude differentiator (safety + long-context), clear use cases",
+          "Year-1 secondary: Technology companies — shorter cycles, technical champions, developer-first entry point",
+          "Year-2 build: Healthcare — strong use case fit but longest procurement and strictest data residency requirements",
+          "Watch list: Manufacturing (Mittelstand) — large market but AI maturity lower, longer education cycle",
+          "Don't spread thin — two well-resourced verticals beat five underfunded ones",
+          "Validate with data: where are current API users concentrated? That's your warm ICP",
+        ],
+      },
+      {
+        question:
+          "Design a sales play for financial services in DACH. What's the ICP, entry point, use case, and win condition?",
+        answerThemes: [
+          "ICP: Private banks, insurance firms, asset managers — €5B+ revenue, dedicated innovation or AI team",
+          "Entry point: CDO, Head of AI/Innovation, or Chief Risk Officer — not IT procurement",
+          "Use case: regulatory document processing (MiFID, Basel IV reporting), contract analysis, research summarization",
+          "Why Claude wins here: 200K context for long docs, safety documentation for compliance teams, no training on data",
+          "Discovery questions: 'What's your current process for X regulatory report? What happens when it's wrong?'",
+          "POC design: take a real 200-page regulatory document and show structured output with sources cited",
+          "Win condition: identified economic buyer, defined success criteria in POC, compliance team sign-off path clear",
+        ],
+      },
+    ],
   },
 ];
 
