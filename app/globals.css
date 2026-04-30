@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @apply bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
+}
+
+::selection {
+  @apply bg-neutral-900 text-neutral-50 dark:bg-neutral-100 dark:text-neutral-900;
+}
+
+textarea {
+  resize: none;
+}

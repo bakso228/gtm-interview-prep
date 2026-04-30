@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# context (source material — do not commit)
+context/
+
+# OS
+.DS_Store
+
+# Screenshots & browser artifacts
+*.png
+*.jpg
+.playwright-mcp/
+
+# TS build info
+tsconfig.tsbuildinfo
