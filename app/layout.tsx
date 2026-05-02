@@ -36,6 +36,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 >
                   Practice
                 </Link>
+                <Link
+                  href="/speak"
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                >
+                  Speak
+                </Link>
               </nav>
               <div className="flex items-center gap-2">
                 <LanguageToggle />

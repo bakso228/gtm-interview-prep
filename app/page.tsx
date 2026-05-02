@@ -7,7 +7,7 @@ export default function Home() {
         <p className="mb-8 text-xs font-medium uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
           Anthropic · GTM Strategy &amp; Operations, DACH
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <ModeCard
             href="/learn"
             label="Learn"
@@ -19,6 +19,12 @@ export default function Home() {
             label="Practice"
             description="68 interview questions across 6 categories. Type your answer, then reveal the ideal structure."
             count="68 questions"
+          />
+          <ModeCard
+            href="/speak"
+            label="Speak"
+            description="Personal speaking notes for the interview — career introduction, key stories, and talking points. Available in EN and DE."
+            count="1 note"
           />
         </div>
       </div>
