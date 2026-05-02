@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import type { ConceptCategory } from "@/content/types";
-import { CATEGORY_LABELS } from "@/content/types";
+import { CATEGORY_LABELS, CATEGORY_LABELS_DE } from "@/content/types";
+import { useLang } from "@/lib/language";
 
 type SidebarItem = {
   category: ConceptCategory;
@@ -19,11 +19,15 @@ export default function Sidebar({
   items: SidebarItem[];
   activeCategory: ConceptCategory | null;
 }) {
+  const { lang } = useLang();
+  const catLabels = lang === "de" ? CATEGORY_LABELS_DE : CATEGORY_LABELS;
+  const allLabel = lang === "de" ? "Alle Konzepte" : "All concepts";
+
   return (
     <nav className="space-y-0.5">
       <SidebarLink
         href="/learn"
-        label="All concepts"
+        label={allLabel}
         active={activeCategory === null}
         count={items.reduce((s, i) => s + i.total, 0)}
         learned={items.reduce((s, i) => s + i.learned, 0)}
@@ -32,7 +36,7 @@ export default function Sidebar({
         <SidebarLink
           key={item.category}
           href={`/learn?category=${item.category}`}
-          label={CATEGORY_LABELS[item.category]}
+          label={catLabels[item.category]}
           active={activeCategory === item.category}
           count={item.total}
           learned={item.learned}

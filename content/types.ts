@@ -1,3 +1,5 @@
+export type Language = "en" | "de";
+
 export type ConceptCategory =
   | "gtm"
   | "revops"
@@ -23,6 +25,15 @@ export type SampleQuestion = {
   answerThemes: string[];
 };
 
+export type ConceptDe = {
+  title: string;
+  definition: string;
+  whyItMatters: string;
+  interviewAngle: string;
+  example?: string;
+  sampleQuestions?: SampleQuestion[];
+};
+
 export type Concept = {
   id: string;
   title: string;
@@ -33,6 +44,7 @@ export type Concept = {
   sampleQuestions?: SampleQuestion[];
   related?: string[];
   example?: string;
+  de?: ConceptDe;
 };
 
 export type Question = {
@@ -59,6 +71,17 @@ export const CATEGORY_LABELS: Record<ConceptCategory, string> = {
   "enterprise-sales": "Enterprise Sales",
   anthropic: "Anthropic-Specific",
   "industry-segments": "DACH Industry Segments",
+};
+
+export const CATEGORY_LABELS_DE: Record<ConceptCategory, string> = {
+  gtm: "GTM-Grundlagen",
+  revops: "Revenue Operations",
+  enablement: "Sales Enablement",
+  metrics: "Metriken & Forecasting",
+  planning: "Planung & Vergütung",
+  "enterprise-sales": "Enterprise Sales",
+  anthropic: "Anthropic-spezifisch",
+  "industry-segments": "DACH-Branchensegmente",
 };
 
 export const QUESTION_CATEGORY_LABELS: Record<QuestionCategory, string> = {

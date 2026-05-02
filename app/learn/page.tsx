@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
-import Link from "next/link";
 import ConceptCard from "@/components/ConceptCard";
 import Sidebar from "@/components/Sidebar";
 import { allConcepts } from "@/content/concepts/index";
 import type { ConceptCategory } from "@/content/types";
-import { CATEGORY_LABELS } from "@/content/types";
+import { CATEGORY_LABELS, CATEGORY_LABELS_DE } from "@/content/types";
 import { getLearnedConcepts } from "@/lib/storage";
+import { useLang } from "@/lib/language";
 import { clsx } from "clsx";
 
 const CATEGORIES = Object.keys(CATEGORY_LABELS) as ConceptCategory[];
@@ -20,6 +20,8 @@ function LearnPageInner() {
   const categoryParam = searchParams.get("category") as ConceptCategory | null;
   const [search, setSearch] = useState("");
   const [learnedIds, setLearnedIds] = useState<string[]>([]);
+  const { lang } = useLang();
+  const catLabels = lang === "de" ? CATEGORY_LABELS_DE : CATEGORY_LABELS;
 
   useEffect(() => {
     setLearnedIds(getLearnedConcepts());
@@ -27,10 +29,12 @@ function LearnPageInner() {
 
   const filtered = allConcepts.filter((c) => {
     const matchesCategory = !categoryParam || c.category === categoryParam;
+    const title = (lang === "de" && c.de?.title) || c.title;
+    const definition = (lang === "de" && c.de?.definition) || c.definition;
     const matchesSearch =
       !search ||
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.definition.toLowerCase().includes(search.toLowerCase());
+      title.toLowerCase().includes(search.toLowerCase()) ||
+      definition.toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -54,11 +58,15 @@ function LearnPageInner() {
     <div className="mx-auto max-w-6xl px-4 py-6">
       {/* Mobile: horizontal category strip */}
       <div className="mb-4 flex gap-2 overflow-x-auto pb-1 md:hidden">
-        <MobilePill label="All" active={!categoryParam} onClick={() => setCategory(null)} />
+        <MobilePill
+          label={lang === "de" ? "Alle" : "All"}
+          active={!categoryParam}
+          onClick={() => setCategory(null)}
+        />
         {CATEGORIES.map((cat) => (
           <MobilePill
             key={cat}
-            label={CATEGORY_LABELS[cat]}
+            label={catLabels[cat]}
             active={categoryParam === cat}
             onClick={() => setCategory(cat)}
           />
@@ -76,14 +84,16 @@ function LearnPageInner() {
           <div className="mb-5">
             <input
               type="search"
-              placeholder="Search concepts..."
+              placeholder={lang === "de" ? "Konzepte durchsuchen…" : "Search concepts..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full max-w-md rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 focus:border-neutral-400 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-600 dark:focus:border-neutral-500"
             />
           </div>
           {filtered.length === 0 ? (
-            <p className="text-sm text-neutral-400 dark:text-neutral-600">No concepts match your search.</p>
+            <p className="text-sm text-neutral-400 dark:text-neutral-600">
+              {lang === "de" ? "Keine Konzepte gefunden." : "No concepts match your search."}
+            </p>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
               {filtered.map((concept) => (
