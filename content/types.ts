@@ -5,7 +5,8 @@ export type ConceptCategory =
   | "metrics"
   | "planning"
   | "enterprise-sales"
-  | "anthropic";
+  | "anthropic"
+  | "industry-segments";
 
 export type QuestionCategory =
   | "behavioral"
@@ -57,6 +58,7 @@ export const CATEGORY_LABELS: Record<ConceptCategory, string> = {
   planning: "Planning & Comp",
   "enterprise-sales": "Enterprise Sales",
   anthropic: "Anthropic-Specific",
+  "industry-segments": "DACH Industry Segments",
 };
 
 export const QUESTION_CATEGORY_LABELS: Record<QuestionCategory, string> = {

@@ -11,8 +11,8 @@ export default function Home() {
           <ModeCard
             href="/learn"
             label="Learn"
-            description="42 GTM concepts, structured and searchable. Master the vocabulary before the room does."
-            count="42 concepts"
+            description="51 GTM concepts across 8 categories — including DACH industry segment playbooks. Master the vocabulary before the room does."
+            count="51 concepts"
           />
           <ModeCard
             href="/practice"

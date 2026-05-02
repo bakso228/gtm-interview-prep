@@ -5,9 +5,10 @@ import metrics from "./metrics";
 import planning from "./planning";
 import enterpriseSales from "./enterprise-sales";
 import anthropic from "./anthropic";
+import industrySegments from "./industry-segments";
 import type { Concept } from "@/content/types";
 
-export { gtm, revops, enablement, metrics, planning, enterpriseSales, anthropic };
+export { gtm, revops, enablement, metrics, planning, enterpriseSales, anthropic, industrySegments };
 
 export const allConcepts: Concept[] = [
   ...gtm,
@@ -17,4 +18,5 @@ export const allConcepts: Concept[] = [
   ...planning,
   ...enterpriseSales,
   ...anthropic,
+  ...industrySegments,
 ];
