@@ -127,17 +127,25 @@ export default function ConceptPage() {
         <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
           {title}
         </h1>
-        <button
-          onClick={handleToggleLearned}
-          className={clsx(
-            "flex-shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
-            learned
-              ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
-              : "border-neutral-200 text-neutral-600 hover:border-neutral-400 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-500"
-          )}
-        >
-          {learned ? ui.learned : ui.markLearned}
-        </button>
+        <div className="flex flex-shrink-0 items-center gap-2">
+          <Link
+            href={`/quiz/${concept.category}`}
+            className="rounded-md border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:border-neutral-400 transition-colors dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-500"
+          >
+            {lang === "de" ? "Kategorie quizzen →" : "Quiz category →"}
+          </Link>
+          <button
+            onClick={handleToggleLearned}
+            className={clsx(
+              "rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
+              learned
+                ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                : "border-neutral-200 text-neutral-600 hover:border-neutral-400 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-500"
+            )}
+          >
+            {learned ? ui.learned : ui.markLearned}
+          </button>
+        </div>
       </div>
 
       {/* Content */}

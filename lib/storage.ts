@@ -3,6 +3,8 @@ const KEYS = {
   seenQuestions: "gtm_seen_questions",
   weakQuestions: "gtm_weak_questions",
   theme: "gtm_theme",
+  quizAttempts: "gtm_quiz_attempts",
+  quizRepetition: "gtm_quiz_repetition",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -65,4 +67,30 @@ export function getTheme(): "light" | "dark" {
 
 export function setTheme(theme: "light" | "dark"): void {
   write(KEYS.theme, theme);
+}
+
+import type { QuizAttempt, QuizRepetitionState } from "@/content/types";
+
+export function getQuizAttempts(): QuizAttempt[] {
+  return read<QuizAttempt[]>(KEYS.quizAttempts, []);
+}
+
+export function addQuizAttempts(attempts: QuizAttempt[]): void {
+  const current = getQuizAttempts();
+  write(KEYS.quizAttempts, [...current, ...attempts]);
+}
+
+export function getRepetitionStates(): QuizRepetitionState[] {
+  return read<QuizRepetitionState[]>(KEYS.quizRepetition, []);
+}
+
+export function upsertRepetitionState(state: QuizRepetitionState): void {
+  const current = getRepetitionStates();
+  const idx = current.findIndex((s) => s.questionId === state.questionId);
+  if (idx >= 0) {
+    current[idx] = state;
+    write(KEYS.quizRepetition, current);
+  } else {
+    write(KEYS.quizRepetition, [...current, state]);
+  }
 }

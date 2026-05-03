@@ -92,3 +92,36 @@ export const QUESTION_CATEGORY_LABELS: Record<QuestionCategory, string> = {
   scenarios: "Scenarios",
   "concept-check": "Concept-Check",
 };
+
+export type QuizQuestion = {
+  id: string;
+  category: ConceptCategory;
+  conceptId?: string;
+  question: string;
+  options: [string, string, string, string];
+  correctIndex: 0 | 1 | 2 | 3;
+  explanation: string;
+  hint?: string;
+  difficulty: Difficulty;
+  de?: {
+    question: string;
+    options: [string, string, string, string];
+    explanation: string;
+    hint?: string;
+  };
+};
+
+export type QuizAttempt = {
+  questionId: string;
+  chosenIndex: number;
+  correct: boolean;
+  timestamp: number;
+  sessionId: string;
+};
+
+export type QuizRepetitionState = {
+  questionId: string;
+  consecutiveCorrect: number;
+  nextReviewDate: string;
+  lastSeen: string;
+};
