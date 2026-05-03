@@ -89,10 +89,20 @@ export function InterviewQuestionCard({
         </a>
       )}
 
-      {/* Question */}
-      <h2 className="text-xl font-semibold leading-snug text-neutral-900 dark:text-neutral-100 sm:text-2xl">
-        {text}
-      </h2>
+      {/* Question — split long ones on sentence boundaries for readability */}
+      <div className="space-y-2.5">
+        {(text.length > 180
+          ? text.split(/(?<=[.!?])\s+(?=[A-Z'"])/)
+          : [text]
+        ).map((sentence, i) => (
+          <p
+            key={i}
+            className="text-xl font-semibold leading-snug text-neutral-900 dark:text-neutral-100 sm:text-2xl"
+          >
+            {sentence}
+          </p>
+        ))}
+      </div>
 
       {/* Tip line for cv-probe */}
       {tip && (
@@ -101,15 +111,15 @@ export function InterviewQuestionCard({
         </p>
       )}
 
-      {/* Watch-for bullets */}
-      <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800/60 dark:bg-amber-950/40">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-amber-700 dark:text-amber-400">
+      {/* Watch-for bullets — muted, secondary to the question */}
+      <div className="mt-6 rounded-lg border border-neutral-200/70 bg-neutral-50/50 p-4 dark:border-neutral-800/60 dark:bg-neutral-900/40">
+        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
           {ui.watchHeader}
         </p>
-        <ul className="space-y-2 text-sm text-amber-900 dark:text-amber-100">
+        <ul className="space-y-2 text-sm text-neutral-500 dark:text-neutral-500">
           {watchFor.map((bullet, i) => (
             <li key={i} className="flex gap-2 leading-relaxed">
-              <span className="text-amber-500 dark:text-amber-500/70">•</span>
+              <span className="text-neutral-300 dark:text-neutral-700">•</span>
               <span>{bullet}</span>
             </li>
           ))}
