@@ -29,7 +29,14 @@ export default function InterviewHub() {
   const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
-    setSessions(getInterviewSessions());
+    const local = getInterviewSessions();
+    const valid = local.filter(
+      (s) => s.interviewerName && s.interviewerName.trim().length > 0 && s.startedAt > 0
+    );
+    if (valid.length !== local.length) {
+      setInterviewSessions(valid);
+    }
+    setSessions(valid);
   }, []);
 
   useEffect(() => {

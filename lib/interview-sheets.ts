@@ -40,7 +40,13 @@ export async function fetchInterviewSessionsFromSheets(): Promise<InterviewSessi
     const data = await res.json();
     if (!data.ok || !Array.isArray(data.attempts)) return [];
     return data.attempts
-      .filter((row: Record<string, unknown>) => row.sessionId)
+      .filter(
+        (row: Record<string, unknown>) =>
+          row.sessionId &&
+          row.interviewerName &&
+          String(row.interviewerName).trim().length > 0 &&
+          Number(row.startedAt) > 0
+      )
       .map(
         (row: Record<string, unknown>): InterviewSession => ({
           id: String(row.sessionId ?? ""),
