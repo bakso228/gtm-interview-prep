@@ -36,17 +36,34 @@ export default function QuizCard({
   const q = lang === "de" && question.de ? question.de : question;
   const hint = lang === "de" && question.de?.hint ? question.de.hint : question.hint;
 
-  function handleSelect(idx: number) {
-    if (state !== "idle") return;
+  function reveal(idx: number) {
+    const correct = idx === question.correctIndex;
     setChosenIndex(idx);
-    setState("selected");
+    setState("revealed");
+    onAnswer(idx, correct);
+  }
+
+  function handleClick(idx: number) {
+    if (state === "idle") {
+      setChosenIndex(idx);
+      setState("selected");
+    } else if (state === "selected" && idx === chosenIndex) {
+      // second click on the same already-selected option submits it
+      reveal(idx);
+    } else if (state === "selected") {
+      // clicking a different option just re-selects
+      setChosenIndex(idx);
+    }
+  }
+
+  function handleDoubleClick(idx: number) {
+    if (state === "revealed") return;
+    reveal(idx);
   }
 
   function handleCheck() {
     if (state !== "selected" || chosenIndex === null) return;
-    const correct = chosenIndex === question.correctIndex;
-    setState("revealed");
-    onAnswer(chosenIndex, correct);
+    reveal(chosenIndex);
   }
 
   function handleNext() {
@@ -64,7 +81,7 @@ export default function QuizCard({
       hint: "Hint",
       correct: "Correct!",
       incorrect: "Incorrect",
-      explanation: "Explanation",
+      doubleClickHint: "Double-click to submit",
     },
     de: {
       checkAnswer: "Antwort prüfen",
@@ -73,12 +90,11 @@ export default function QuizCard({
       hint: "Hinweis",
       correct: "Richtig!",
       incorrect: "Falsch",
-      explanation: "Erklärung",
+      doubleClickHint: "Doppelklick zum Bestätigen",
     },
   }[lang];
 
   function optionStyle(idx: number) {
-    const label = ["A", "B", "C", "D"][idx];
     const base =
       "w-full rounded-xl border px-4 py-3 text-left text-sm transition-colors flex items-start gap-3";
     if (state === "idle") {
@@ -88,7 +104,7 @@ export default function QuizCard({
       return clsx(
         base,
         idx === chosenIndex
-          ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+          ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 cursor-pointer"
           : "border-neutral-200 text-neutral-500 dark:border-neutral-700 dark:text-neutral-500 cursor-pointer"
       );
     }
@@ -100,7 +116,6 @@ export default function QuizCard({
       return clsx(base, "border-red-400 bg-red-50 text-red-900 dark:border-red-500 dark:bg-red-950 dark:text-red-100");
     }
     return clsx(base, "border-neutral-200 text-neutral-400 dark:border-neutral-800 dark:text-neutral-600");
-    void label;
   }
 
   return (
@@ -121,7 +136,8 @@ export default function QuizCard({
         {(q.options as [string, string, string, string]).map((opt, idx) => (
           <button
             key={idx}
-            onClick={() => handleSelect(idx)}
+            onClick={() => handleClick(idx)}
+            onDoubleClick={() => handleDoubleClick(idx)}
             disabled={state === "revealed"}
             className={optionStyle(idx)}
           >
@@ -130,6 +146,13 @@ export default function QuizCard({
           </button>
         ))}
       </div>
+
+      {/* Hint: double-click affordance when idle */}
+      {state === "idle" && (
+        <p className="text-xs text-neutral-300 dark:text-neutral-700 select-none">
+          {ui.doubleClickHint}
+        </p>
+      )}
 
       {/* Revealed: result + explanation */}
       {state === "revealed" && (
@@ -153,7 +176,7 @@ export default function QuizCard({
         </div>
       )}
 
-      {/* Hint */}
+      {/* Hint dropdown */}
       {hint && state !== "revealed" && (
         <div>
           <button

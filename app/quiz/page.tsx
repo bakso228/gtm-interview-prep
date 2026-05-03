@@ -157,6 +157,26 @@ export default function QuizHubPage() {
         </div>
       </div>
 
+      {/* All Questions card */}
+      <div className="mb-4">
+        <Link
+          href="/quiz/all"
+          className="group flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-5 py-4 hover:border-neutral-400 hover:shadow-sm transition-all dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-600"
+        >
+          <div>
+            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+              {lang === "de" ? "Alle Fragen" : "All Questions"}
+            </p>
+            <p className="text-xs text-neutral-400 dark:text-neutral-600 mt-0.5">
+              {allQuizQuestions.length} {lang === "de" ? "Fragen · zufällige Reihenfolge" : "questions · random order"}
+            </p>
+          </div>
+          <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300 group-hover:underline">
+            {lang === "de" ? "Starten →" : "Start →"}
+          </span>
+        </Link>
+      </div>
+
       {/* Category cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {CATEGORIES.map((cat) => {
