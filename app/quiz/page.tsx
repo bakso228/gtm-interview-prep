@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { allQuizQuestions } from "@/content/quiz/index";
-import { getQuizAttempts, setQuizAttempts, getRepetitionStates } from "@/lib/storage";
+import { getQuizAttempts, setQuizAttempts, getRepetitionStates, clearQuizData } from "@/lib/storage";
 import { getReviewQueue, getTodayString } from "@/lib/quiz-repetition";
-import { computeScoreByCategory, computeScoreByDay, mergeAttempts } from "@/lib/quiz-scores";
+import { computeScoreByCategory, computeScoreByDay, mergeAttempts, type DayScore } from "@/lib/quiz-scores";
 import { fetchAttemptsFromSheets } from "@/lib/sheets-sync";
 import { CATEGORY_LABELS, CATEGORY_LABELS_DE, type ConceptCategory } from "@/content/types";
 import { useLang } from "@/lib/language";
 import { clsx } from "clsx";
+import { QuizDayChart } from "@/components/QuizDayChart";
 
 const CATEGORIES: ConceptCategory[] = [
   "gtm", "revops", "enablement", "metrics", "planning",
@@ -23,19 +24,16 @@ export default function QuizHubPage() {
   const [scores, setScores] = useState(() =>
     computeScoreByCategory(getQuizAttempts(), allQuizQuestions)
   );
-  const [reviewCount, setReviewCount] = useState(() => {
-    const states = getRepetitionStates();
-    return getReviewQueue(states, getTodayString()).length;
-  });
-  const [todayScore, setTodayScore] = useState<{ total: number; correct: number } | null>(null);
+  const [reviewCount, setReviewCount] = useState(() =>
+    getReviewQueue(getRepetitionStates(), getTodayString()).length
+  );
+  const [allDays, setAllDays] = useState<DayScore[]>(() =>
+    computeScoreByDay(getQuizAttempts())
+  );
   const [syncing, setSyncing] = useState(false);
 
-  useEffect(() => {
-    const today = getTodayString();
-    const days = computeScoreByDay(getQuizAttempts());
-    const todayDay = days.find((d) => d.date === today);
-    setTodayScore(todayDay ? { total: todayDay.total, correct: todayDay.correct } : null);
-  }, []);
+  const today = getTodayString();
+  const todayDay = allDays.find((d) => d.date === today) ?? null;
 
   useEffect(() => {
     async function sync() {
@@ -48,10 +46,7 @@ export default function QuizHubPage() {
           if (merged.length !== local.length) {
             setQuizAttempts(merged);
             setScores(computeScoreByCategory(merged, allQuizQuestions));
-            const today = getTodayString();
-            const days = computeScoreByDay(merged);
-            const todayDay = days.find((d) => d.date === today);
-            setTodayScore(todayDay ? { total: todayDay.total, correct: todayDay.correct } : null);
+            setAllDays(computeScoreByDay(merged));
           }
         }
       } finally {
@@ -61,39 +56,74 @@ export default function QuizHubPage() {
     void sync();
   }, []);
 
+  function handleReset() {
+    const msg = lang === "de"
+      ? "Alle Quiz-Daten löschen? Das kann nicht rückgängig gemacht werden."
+      : "Delete all quiz progress? This cannot be undone.";
+    if (!confirm(msg)) return;
+    clearQuizData();
+    setScores(computeScoreByCategory([], allQuizQuestions));
+    setReviewCount(0);
+    setAllDays([]);
+  }
+
   const ui = {
     en: {
       heading: "Quiz",
       sub: "Test your knowledge across all 8 modules.",
+      progress: "Daily Progress",
+      todayLabel: "Today",
+      todayScore: (c: number, t: number) => `${c}/${t} correct · ${Math.round((c / t) * 100)}%`,
+      noActivity: "No activity today",
       reviewCard: "Review Queue",
       reviewDue: (n: number) => `${n} question${n !== 1 ? "s" : ""} due today`,
       reviewEmpty: "Nothing due — you're up to date",
       startReview: "Start Review →",
-      today: "Today",
-      todayScore: (c: number, t: number) => `${c}/${t} correct`,
-      noActivity: "No activity yet today",
+      historyHeading: "History",
+      historyDate: "Date",
+      historyAnswered: "Answered",
+      historyCorrect: "Correct",
+      historyScore: "Score",
       start: "Start →",
       seen: (n: number, t: number) => `${n} / ${t} seen`,
       syncing: "Syncing…",
+      reset: "Reset progress",
+      resetConfirm: "",
     },
     de: {
       heading: "Quiz",
       sub: "Teste dein Wissen in allen 8 Modulen.",
+      progress: "Täglicher Fortschritt",
+      todayLabel: "Heute",
+      todayScore: (c: number, t: number) => `${c}/${t} richtig · ${Math.round((c / t) * 100)}%`,
+      noActivity: "Keine Aktivität heute",
       reviewCard: "Wiederholung",
       reviewDue: (n: number) => `${n} Frage${n !== 1 ? "n" : ""} heute fällig`,
       reviewEmpty: "Alles erledigt — keine Wiederholungen fällig",
       startReview: "Wiederholung starten →",
-      today: "Heute",
-      todayScore: (c: number, t: number) => `${c}/${t} richtig`,
-      noActivity: "Noch keine Aktivität heute",
+      historyHeading: "Verlauf",
+      historyDate: "Datum",
+      historyAnswered: "Beantwortet",
+      historyCorrect: "Richtig",
+      historyScore: "Ergebnis",
       start: "Starten →",
       seen: (n: number, t: number) => `${n} / ${t} gesehen`,
       syncing: "Synchronisiere…",
+      reset: "Fortschritt zurücksetzen",
+      resetConfirm: "",
     },
   }[lang];
 
+  function formatDate(dateStr: string) {
+    const d = new Date(dateStr + "T12:00:00");
+    return d.toLocaleDateString(lang === "de" ? "de-DE" : "en-US", {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
+      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
           {ui.heading}
@@ -104,25 +134,26 @@ export default function QuizHubPage() {
         )}
       </div>
 
-      {/* Today + Review row */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2">
-        {/* Today's score */}
-        <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
-          <p className="mb-1 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
-            {ui.today}
-          </p>
-          {todayScore ? (
-            <>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-                {Math.round((todayScore.correct / todayScore.total) * 100)}%
+      {/* Chart + Review row */}
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        {/* Line chart — spans 2 cols on md+ */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900 md:col-span-2">
+          <div className="mb-3 flex items-start justify-between">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
+                {ui.progress}
               </p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                {ui.todayScore(todayScore.correct, todayScore.total)}
+              <p className="mt-0.5 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {todayDay
+                  ? `${ui.todayLabel}: ${ui.todayScore(todayDay.correct, todayDay.total)}`
+                  : ui.noActivity}
               </p>
-            </>
-          ) : (
-            <p className="text-sm text-neutral-400 dark:text-neutral-600">{ui.noActivity}</p>
-          )}
+            </div>
+            <span className="text-xs text-neutral-400 dark:text-neutral-600">
+              {allDays.length > 0 && `${allDays.length} ${lang === "de" ? "Tag" : "day"}${allDays.length !== 1 ? (lang === "de" ? "e" : "s") : ""}`}
+            </span>
+          </div>
+          <QuizDayChart days={allDays} />
         </div>
 
         {/* Review queue */}
@@ -157,6 +188,53 @@ export default function QuizHubPage() {
         </div>
       </div>
 
+      {/* History table */}
+      {allDays.length > 0 && (
+        <div className="mb-6 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+          <p className="border-b border-neutral-100 px-5 py-3 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:border-neutral-800 dark:text-neutral-600">
+            {ui.historyHeading}
+          </p>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-neutral-100 dark:border-neutral-800">
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-neutral-400 dark:text-neutral-600">{ui.historyDate}</th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-neutral-400 dark:text-neutral-600">{ui.historyAnswered}</th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-neutral-400 dark:text-neutral-600">{ui.historyCorrect}</th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-neutral-400 dark:text-neutral-600">{ui.historyScore}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...allDays].reverse().map((d) => (
+                <tr key={d.date} className="border-b border-neutral-50 last:border-0 dark:border-neutral-800/50">
+                  <td className="px-5 py-2.5 text-neutral-700 dark:text-neutral-300">
+                    {formatDate(d.date)}
+                    {d.date === today && (
+                      <span className="ml-2 rounded-full bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
+                        {ui.todayLabel}
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-5 py-2.5 text-right text-neutral-500 dark:text-neutral-400">{d.total}</td>
+                  <td className="px-5 py-2.5 text-right text-neutral-500 dark:text-neutral-400">{d.correct}</td>
+                  <td className="px-5 py-2.5 text-right">
+                    <span className={clsx(
+                      "rounded-full px-2 py-0.5 text-xs font-medium",
+                      d.percentage >= 80
+                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                        : d.percentage >= 50
+                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                        : "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"
+                    )}>
+                      {d.percentage}%
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {/* All Questions card */}
       <div className="mb-4">
         <Link
@@ -178,7 +256,7 @@ export default function QuizHubPage() {
       </div>
 
       {/* Category cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {CATEGORIES.map((cat) => {
           const score = scores.find((s) => s.category === cat);
           const total = allQuizQuestions.filter((q) => q.category === cat).length;
@@ -216,6 +294,16 @@ export default function QuizHubPage() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Reset button */}
+      <div className="border-t border-neutral-100 pt-6 dark:border-neutral-800">
+        <button
+          onClick={handleReset}
+          className="text-xs text-neutral-400 hover:text-red-500 dark:text-neutral-600 dark:hover:text-red-400 transition-colors"
+        >
+          {ui.reset}
+        </button>
       </div>
     </div>
   );
