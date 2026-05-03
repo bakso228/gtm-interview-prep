@@ -125,3 +125,53 @@ export type QuizRepetitionState = {
   nextReviewDate: string;
   lastSeen: string;
 };
+
+export type InterviewQuestionType = "intro" | "cv-probe" | "star" | "what-if" | "outro";
+
+export type InterviewQuestion = {
+  id: string;
+  type: InterviewQuestionType;
+  question: string;
+  watchFor: string[];
+  tip?: string;
+  de?: {
+    question: string;
+    watchFor: string[];
+    tip?: string;
+  };
+};
+
+export type InterviewRating = 0.6 | 0.8 | 1.0 | 1.2 | "skip";
+
+export type InterviewAnswer = {
+  questionId: string;
+  rating: InterviewRating;
+  durationSeconds: number;
+  timestamp: number;
+};
+
+export type InterviewSession = {
+  id: string;
+  interviewerName: string;
+  startedAt: number;
+  endedAt?: number;
+  questionIds: string[];
+  answers: InterviewAnswer[];
+  overallScorePct: number;
+};
+
+export const INTERVIEW_TYPE_LABELS: Record<InterviewQuestionType, string> = {
+  intro: "Intro",
+  "cv-probe": "CV check",
+  star: "STAR · past experience",
+  "what-if": "What-if scenario",
+  outro: "Closing",
+};
+
+export const INTERVIEW_TYPE_LABELS_DE: Record<InterviewQuestionType, string> = {
+  intro: "Einstieg",
+  "cv-probe": "CV-Check",
+  star: "STAR · Erfahrung",
+  "what-if": "Szenario",
+  outro: "Abschluss",
+};

@@ -5,6 +5,7 @@ const KEYS = {
   theme: "gtm_theme",
   quizAttempts: "gtm_quiz_attempts",
   quizRepetition: "gtm_quiz_repetition",
+  interviewSessions: "gtm_interview_sessions",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -87,6 +88,40 @@ export function setQuizAttempts(attempts: QuizAttempt[]): void {
 export function clearQuizData(): void {
   write(KEYS.quizAttempts, []);
   write(KEYS.quizRepetition, []);
+}
+
+import type { InterviewSession } from "@/content/types";
+
+export function getInterviewSessions(): InterviewSession[] {
+  return read<InterviewSession[]>(KEYS.interviewSessions, []);
+}
+
+export function getInterviewSession(id: string): InterviewSession | null {
+  return getInterviewSessions().find((s) => s.id === id) ?? null;
+}
+
+export function addInterviewSession(session: InterviewSession): void {
+  const current = getInterviewSessions();
+  write(KEYS.interviewSessions, [...current, session]);
+}
+
+export function updateInterviewSession(updated: InterviewSession): void {
+  const current = getInterviewSessions();
+  const idx = current.findIndex((s) => s.id === updated.id);
+  if (idx >= 0) {
+    current[idx] = updated;
+    write(KEYS.interviewSessions, current);
+  } else {
+    write(KEYS.interviewSessions, [...current, updated]);
+  }
+}
+
+export function setInterviewSessions(sessions: InterviewSession[]): void {
+  write(KEYS.interviewSessions, sessions);
+}
+
+export function clearInterviewData(): void {
+  write(KEYS.interviewSessions, []);
 }
 
 export function getRepetitionStates(): QuizRepetitionState[] {

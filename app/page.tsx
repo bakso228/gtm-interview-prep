@@ -3,11 +3,23 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex min-h-[calc(100vh-48px)] flex-col items-center justify-center px-4">
-      <div className="w-full max-w-3xl space-y-3">
+      <div className="w-full max-w-5xl space-y-3">
         <p className="mb-8 text-xs font-medium uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
           Anthropic · GTM Strategy &amp; Operations, DACH
         </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <ModeCard
+            href="/quiz"
+            label="Quiz"
+            description="~90 multiple-choice questions across 8 modules. Test recall, track daily scores, and review weak spots."
+            count="~92 questions"
+          />
+          <ModeCard
+            href="/interview"
+            label="Interview"
+            description="Run a live mock interview with a friend. 10 questions, timer, watch-for bullets, scored — synced to your sheet."
+            count="24 questions"
+          />
           <ModeCard
             href="/learn"
             label="Learn"
@@ -25,12 +37,6 @@ export default function Home() {
             label="Speak"
             description="Personal speaking notes for the interview — career introduction, key stories, and talking points. Available in EN and DE."
             count="1 note"
-          />
-          <ModeCard
-            href="/quiz"
-            label="Quiz"
-            description="~90 multiple-choice questions across 8 modules. Test recall, track daily scores, and review weak spots with spaced repetition."
-            count="~92 questions"
           />
         </div>
       </div>
