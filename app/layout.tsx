@@ -17,34 +17,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <header className="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-neutral-50/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
             <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4">
-              <nav className="flex items-center gap-6">
+              <nav className="flex items-center gap-3 sm:gap-5">
                 <Link
                   href="/"
-                  className="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+                  className="text-sm font-medium text-neutral-900 dark:text-neutral-100 shrink-0"
                 >
                   GTM Prep
                 </Link>
                 <Link
                   href="/learn"
-                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors shrink-0"
                 >
                   Learn
                 </Link>
                 <Link
                   href="/practice"
-                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors shrink-0"
                 >
                   Practice
                 </Link>
                 <Link
                   href="/speak"
-                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors shrink-0"
                 >
                   Speak
                 </Link>
                 <Link
                   href="/quiz"
-                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                  className="text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors shrink-0"
                 >
                   Quiz
                 </Link>

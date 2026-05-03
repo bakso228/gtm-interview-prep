@@ -26,8 +26,29 @@ export default function SpeakPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
+      {/* Mobile: horizontal pill strip — above content */}
+      <div className="mb-4 flex gap-2 overflow-x-auto pb-1 md:hidden">
+        {speakingNotes.map((note) => {
+          const noteTitle = lang === "de" && note.titleDe ? note.titleDe : note.title;
+          return (
+            <button
+              key={note.id}
+              onClick={() => setActiveId(note.id)}
+              className={clsx(
+                "flex-shrink-0 rounded-full border px-3 py-1.5 text-xs transition-colors",
+                activeId === note.id
+                  ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+                  : "border-neutral-200 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+              )}
+            >
+              {noteTitle}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex gap-8">
-        {/* Sidebar */}
+        {/* Sidebar — desktop only */}
         <div className="hidden w-52 flex-shrink-0 md:block">
           <nav className="space-y-0.5">
             <p className="mb-3 px-3 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
@@ -58,27 +79,6 @@ export default function SpeakPage() {
               {ui.count(speakingNotes.length)}
             </p>
           </nav>
-        </div>
-
-        {/* Mobile: horizontal strip */}
-        <div className="mb-4 flex gap-2 overflow-x-auto pb-1 md:hidden w-full">
-          {speakingNotes.map((note) => {
-            const noteTitle = lang === "de" && note.titleDe ? note.titleDe : note.title;
-            return (
-              <button
-                key={note.id}
-                onClick={() => setActiveId(note.id)}
-                className={clsx(
-                  "flex-shrink-0 rounded-full border px-3 py-1.5 text-xs transition-colors",
-                  activeId === note.id
-                    ? "border-neutral-900 bg-neutral-900 text-neutral-50 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
-                    : "border-neutral-200 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
-                )}
-              >
-                {noteTitle}
-              </button>
-            );
-          })}
         </div>
 
         {/* Main content */}
