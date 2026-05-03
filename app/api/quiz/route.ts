@@ -16,16 +16,23 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!SHEETS_URL) return NextResponse.json({ ok: true });
+  if (!SHEETS_URL) return NextResponse.json({ ok: true, configured: false });
   try {
     const body = await request.text();
-    await fetch(SHEETS_URL, {
+    const sheetsRes = await fetch(SHEETS_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body,
     });
-  } catch {
-    // silent fail — localStorage is source of truth
+    const text = await sheetsRes.text();
+    // If Apps Script returns non-JSON (e.g. a login page), surface the status
+    try {
+      JSON.parse(text);
+      return NextResponse.json({ ok: true, configured: true });
+    } catch {
+      return NextResponse.json({ ok: false, configured: true, status: sheetsRes.status, preview: text.slice(0, 120) });
+    }
+  } catch (err) {
+    return NextResponse.json({ ok: false, configured: true, error: String(err) });
   }
-  return NextResponse.json({ ok: true });
 }
