@@ -1,14 +1,14 @@
 import type { QuizAttempt } from "@/content/types";
 
-const WEBHOOK = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK_URL;
+// Calls the Next.js API route which proxies to Apps Script server-side (no CORS issues)
+const API = "/api/quiz";
 
 export async function syncAttemptsToSheets(attempts: QuizAttempt[]): Promise<void> {
-  if (!WEBHOOK || attempts.length === 0) return;
+  if (attempts.length === 0) return;
   try {
-    await fetch(WEBHOOK, {
+    await fetch(API, {
       method: "POST",
-      // Apps Script doPost requires text/plain to populate e.postData.contents
-      headers: { "Content-Type": "text/plain" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(attempts),
     });
   } catch {
@@ -17,20 +17,21 @@ export async function syncAttemptsToSheets(attempts: QuizAttempt[]): Promise<voi
 }
 
 export async function fetchAttemptsFromSheets(): Promise<QuizAttempt[]> {
-  if (!WEBHOOK) return [];
   try {
-    const res = await fetch(WEBHOOK, { cache: "no-store" });
+    const res = await fetch(API, { cache: "no-store" });
     const data = await res.json();
     if (!data.ok || !Array.isArray(data.attempts)) return [];
-    return data.attempts.map(
-      (row: Record<string, unknown>): QuizAttempt => ({
-        questionId: String(row.questionId ?? ""),
-        chosenIndex: Number(row.chosenIndex ?? 0),
-        correct: String(row.correct) === "TRUE" || row.correct === true,
-        timestamp: Number(row.timestamp ?? 0),
-        sessionId: String(row.sessionId ?? ""),
-      })
-    );
+    return data.attempts
+      .filter((row: Record<string, unknown>) => row.questionId)
+      .map(
+        (row: Record<string, unknown>): QuizAttempt => ({
+          questionId: String(row.questionId ?? ""),
+          chosenIndex: Number(row.chosenIndex ?? 0),
+          correct: String(row.correct) === "TRUE" || row.correct === true,
+          timestamp: Number(row.timestamp ?? 0),
+          sessionId: String(row.sessionId ?? ""),
+        })
+      );
   } catch {
     return [];
   }
