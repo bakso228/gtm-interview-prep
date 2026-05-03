@@ -80,6 +80,10 @@ export function addQuizAttempts(attempts: QuizAttempt[]): void {
   write(KEYS.quizAttempts, [...current, ...attempts]);
 }
 
+export function setQuizAttempts(attempts: QuizAttempt[]): void {
+  write(KEYS.quizAttempts, attempts);
+}
+
 export function getRepetitionStates(): QuizRepetitionState[] {
   return read<QuizRepetitionState[]>(KEYS.quizRepetition, []);
 }

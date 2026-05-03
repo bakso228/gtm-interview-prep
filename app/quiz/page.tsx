@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { allQuizQuestions } from "@/content/quiz/index";
-import { getQuizAttempts, addQuizAttempts, getRepetitionStates } from "@/lib/storage";
+import { getQuizAttempts, setQuizAttempts, getRepetitionStates } from "@/lib/storage";
 import { getReviewQueue, getTodayString } from "@/lib/quiz-repetition";
 import { computeScoreByCategory, computeScoreByDay, mergeAttempts } from "@/lib/quiz-scores";
 import { fetchAttemptsFromSheets } from "@/lib/sheets-sync";
@@ -45,8 +45,8 @@ export default function QuizHubPage() {
         if (remote.length > 0) {
           const local = getQuizAttempts();
           const merged = mergeAttempts(local, remote);
-          if (merged.length > local.length) {
-            addQuizAttempts(merged.slice(local.length));
+          if (merged.length !== local.length) {
+            setQuizAttempts(merged);
             setScores(computeScoreByCategory(merged, allQuizQuestions));
             const today = getTodayString();
             const days = computeScoreByDay(merged);
