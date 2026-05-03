@@ -55,13 +55,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Speak
                 </Link>
               </nav>
-              <div className="flex items-center gap-2">
+              {/* Desktop: toggles in top-right of header */}
+              <div className="hidden items-center gap-2 md:flex">
                 <LanguageToggle />
                 <ThemeToggle />
               </div>
             </div>
           </header>
-          <main className="pt-12">{children}</main>
+
+          <main className="pt-12 pb-16 md:pb-0">{children}</main>
+
+          {/* Mobile: toggles in fixed bottom bar */}
+          <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center gap-3 border-t border-neutral-200 bg-neutral-50/90 px-4 py-2 backdrop-blur md:hidden dark:border-neutral-800 dark:bg-neutral-950/90">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </LanguageProvider>
       </body>
     </html>
