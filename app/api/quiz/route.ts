@@ -3,13 +3,15 @@ import { NextResponse } from "next/server";
 const SHEETS_URL = process.env.SHEETS_WEBHOOK_URL;
 
 export async function GET() {
-  if (!SHEETS_URL) return NextResponse.json({ ok: true, attempts: [] });
+  if (!SHEETS_URL) {
+    return NextResponse.json({ ok: true, attempts: [], configured: false });
+  }
   try {
     const res = await fetch(SHEETS_URL, { cache: "no-store" });
     const data = await res.json();
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json({ ok: true, attempts: [] });
+    return NextResponse.json({ ...data, configured: true });
+  } catch (err) {
+    return NextResponse.json({ ok: false, attempts: [], configured: true, error: String(err) });
   }
 }
 
