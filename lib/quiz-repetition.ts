@@ -1,6 +1,6 @@
 import type { QuizRepetitionState } from "@/content/types";
 
-const INTERVALS = [1, 3, 7] as const; // days indexed by consecutiveCorrect (0, 1, 2 → graduated at 3)
+const INTERVALS = [0, 3, 7] as const; // wrong: same day (0), right×1: 3d, right×2: 7d → graduated at 3
 
 function addDays(dateStr: string, days: number): string {
   const d = new Date(dateStr);
