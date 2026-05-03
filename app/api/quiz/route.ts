@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       JSON.parse(text);
       return NextResponse.json({ ok: true, configured: true });
     } catch {
-      return NextResponse.json({ ok: false, configured: true, status: sheetsRes.status, preview: text.slice(0, 120) });
+      return NextResponse.json({ ok: false, configured: true, status: sheetsRes.status, preview: text.slice(0, 400) });
     }
   } catch (err) {
     return NextResponse.json({ ok: false, configured: true, error: String(err) });
