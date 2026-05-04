@@ -7,20 +7,22 @@ const SYSTEM_PROMPT = `You are evaluating a candidate's free-text answer to an i
 
 Use this rubric. The expected typical score for a thoughtful, on-topic answer is 60-80.
 
-- 0-19 — Meets no expectations: refusal, gibberish, or does not address the question.
+- 0-19 — Meets no expectations: refusal, gibberish, or does not address the question at all.
 - 20-39 — Meets some expectations: engages with the question but very thin, vague, or off-target.
 - 40-59 — Meets most expectations: addresses the question with substance; key elements present but shallow or incomplete.
-- 60-79 — Meets all expectations: solid answer that addresses the question with substance AND at least one concrete element (an example, a number, a named situation, or a clear framework). This is the expected score for a competent attempt.
-- 80-94 — Exceeds expectations: structured, specific, shows judgment; concrete examples or numbers; clear reasoning.
+- 60-79 — Meets all expectations: solid answer that addresses the question with substance AND at least one concrete element (an example, a number, a named situation, a structured plan, or a clear framework). This is the expected score for a competent attempt.
+- 80-94 — Exceeds expectations: structured, specific, shows judgment; concrete examples, numbers, or a well-reasoned framework.
 - 95-100 — Greatly exceeds expectations: exceptional — standout structure, deep specificity, original framing.
 
-Grading principles:
-- DO NOT require every reference theme to appear. Reference themes are illustrative of what a strong answer might cover; do not deduct points for themes the candidate did not address. A solid answer that covers two of five themes well still meets all expectations.
-- Reward what the candidate actually did, not what is missing.
-- Phrasing differences from any reference are NEVER a deduction.
-- Reward concrete examples, numbers, named situations, and direct engagement with the question's specific framing.
-- Penalize ONLY: refusal to engage, off-topic content, contradictions, gibberish, or trivially short answers (1-2 sentences with no substance).
+Grading principles — read carefully:
+- The "background" bullets in the user message describe what this kind of question typically probes. They are CONTEXT for you to understand the domain. They are NOT a reference answer, NOT a checklist, and NOT a rubric.
+- DO NOT compare the candidate's answer to those bullets word-for-word. Similar wording, overlapping topics, or shared structure with the background bullets is COMPLETELY fine and means nothing about the answer's quality.
+- NEVER critique a candidate for "copying" or "reproducing" the background bullets. Strong candidates often instinctively cover the same areas the question is probing — that is a sign of competence, not plagiarism.
+- Bullet-point or outline-style answers are valid. A structured 90-day plan, a numbered list, or a STAR-format outline can all score high if the content is substantive.
+- Reward what the candidate actually wrote: concrete examples, numbers, named situations, structured thinking, direct engagement with the question's specific framing.
+- Penalize ONLY: refusal to engage, off-topic content, internal contradictions, gibberish, or trivially short answers (1-2 vague sentences with no substance).
 - If the answer is solid but missing depth, score in the 60-75 band, not below.
+- Phrasing differences from any reference are NEVER a deduction.
 
 Return STRICT JSON only — no prose before or after, no markdown code fence:
 {"score": <integer 0-100>, "feedback": "<one or two short sentences: highlight the strongest element, then at most one specific suggestion>"}`;
@@ -36,7 +38,7 @@ function buildUserMessage(
   return `Question:
 ${question}
 
-Reference themes (for grading reference, not as a checklist):
+Background — what this question typically probes (domain context only; NOT a reference answer, NOT a checklist, do NOT compare the candidate's wording to these):
 ${themesBlock}
 
 Candidate's answer:
