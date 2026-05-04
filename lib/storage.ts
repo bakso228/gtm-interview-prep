@@ -6,6 +6,7 @@ const KEYS = {
   quizAttempts: "gtm_quiz_attempts",
   quizRepetition: "gtm_quiz_repetition",
   interviewSessions: "gtm_interview_sessions",
+  practiceAttempts: "gtm_practice_attempts",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -70,7 +71,7 @@ export function setTheme(theme: "light" | "dark"): void {
   write(KEYS.theme, theme);
 }
 
-import type { QuizAttempt, QuizRepetitionState } from "@/content/types";
+import type { QuizAttempt, QuizRepetitionState, PracticeAttempt } from "@/content/types";
 
 export function getQuizAttempts(): QuizAttempt[] {
   return read<QuizAttempt[]>(KEYS.quizAttempts, []);
@@ -137,4 +138,21 @@ export function upsertRepetitionState(state: QuizRepetitionState): void {
   } else {
     write(KEYS.quizRepetition, [...current, state]);
   }
+}
+
+export function getPracticeAttempts(): PracticeAttempt[] {
+  return read<PracticeAttempt[]>(KEYS.practiceAttempts, []);
+}
+
+export function addPracticeAttempt(attempt: PracticeAttempt): void {
+  const current = getPracticeAttempts();
+  write(KEYS.practiceAttempts, [...current, attempt]);
+}
+
+export function setPracticeAttempts(attempts: PracticeAttempt[]): void {
+  write(KEYS.practiceAttempts, attempts);
+}
+
+export function clearPracticeAttempts(): void {
+  write(KEYS.practiceAttempts, []);
 }

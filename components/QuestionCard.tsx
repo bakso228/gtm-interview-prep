@@ -11,6 +11,7 @@ export default function QuestionCard({
   onMarkWeak,
   onNext,
   onSkip,
+  onReveal,
   sessionProgress,
 }: {
   question: Question;
@@ -18,6 +19,7 @@ export default function QuestionCard({
   onMarkWeak: () => void;
   onNext: () => void;
   onSkip: () => void;
+  onReveal?: () => void;
   sessionProgress?: { current: number; total: number };
 }) {
   const [answer, setAnswer] = useState("");
@@ -25,6 +27,7 @@ export default function QuestionCard({
 
   function handleReveal() {
     setRevealed(true);
+    onReveal?.();
   }
 
   function handleNext() {

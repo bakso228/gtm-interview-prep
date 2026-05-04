@@ -3,10 +3,21 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { allQuestions } from "@/content/questions/index";
-import type { QuestionCategory, Difficulty } from "@/content/types";
+import type { QuestionCategory, Difficulty, PracticeAttempt } from "@/content/types";
 import { QUESTION_CATEGORY_LABELS } from "@/content/types";
-import { getSeenQuestions, getWeakQuestions } from "@/lib/storage";
+import {
+  getSeenQuestions,
+  getWeakQuestions,
+  getPracticeAttempts,
+  setPracticeAttempts,
+} from "@/lib/storage";
 import { shuffle, filterByCategory } from "@/lib/shuffle";
+import {
+  fetchPracticeAttemptsFromSheets,
+  mergePracticeAttempts,
+} from "@/lib/practice-sheets";
+import { computePracticeByDay, type PracticeDayCount } from "@/lib/practice-scores";
+import { PracticeDayChart } from "@/components/PracticeDayChart";
 import { clsx } from "clsx";
 
 const CATEGORIES = Object.keys(QUESTION_CATEGORY_LABELS) as QuestionCategory[];
@@ -19,11 +30,46 @@ export default function PracticePage() {
   const [seenIds, setSeenIds] = useState<string[]>([]);
   const [weakIds, setWeakIds] = useState<string[]>([]);
   const [weakMode, setWeakMode] = useState(false);
+  const [allDays, setAllDays] = useState<PracticeDayCount[]>([]);
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     setSeenIds(getSeenQuestions());
     setWeakIds(getWeakQuestions());
+    setAllDays(computePracticeByDay(getPracticeAttempts()));
   }, []);
+
+  useEffect(() => {
+    async function sync() {
+      setSyncing(true);
+      try {
+        const remote = await fetchPracticeAttemptsFromSheets();
+        if (remote.length > 0) {
+          const local: PracticeAttempt[] = getPracticeAttempts();
+          const merged = mergePracticeAttempts(local, remote);
+          if (merged.length !== local.length) {
+            setPracticeAttempts(merged);
+            setAllDays(computePracticeByDay(merged));
+          }
+        }
+      } finally {
+        setSyncing(false);
+      }
+    }
+    void sync();
+  }, []);
+
+  const today = new Date().toISOString().split("T")[0];
+  const todayDay = allDays.find((d) => d.date === today) ?? null;
+
+  function formatDate(dateStr: string) {
+    const d = new Date(dateStr + "T12:00:00");
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
 
   function getFiltered() {
     let pool = weakMode
@@ -47,14 +93,79 @@ export default function PracticePage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       {/* Stats */}
-      <div className="mb-8 flex items-center gap-6 text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="mb-6 flex items-center gap-6 text-sm text-neutral-500 dark:text-neutral-400">
         <span>
           <span className="font-medium text-neutral-900 dark:text-neutral-100">{seenIds.length}</span> of {allQuestions.length} seen
         </span>
         <span>
           <span className="font-medium text-neutral-900 dark:text-neutral-100">{weakIds.length}</span> marked weak
         </span>
+        {syncing && (
+          <span className="text-xs text-neutral-400 dark:text-neutral-600">Syncing…</span>
+        )}
       </div>
+
+      {/* Daily progress chart */}
+      <div className="mb-6 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="mb-3 flex items-start justify-between">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
+              Daily Progress
+            </p>
+            <p className="mt-0.5 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              {todayDay
+                ? `Today: ${todayDay.total} answered`
+                : "No activity today"}
+            </p>
+          </div>
+          <span className="text-xs text-neutral-400 dark:text-neutral-600">
+            {allDays.length > 0 &&
+              `${allDays.length} day${allDays.length !== 1 ? "s" : ""}`}
+          </span>
+        </div>
+        <PracticeDayChart days={allDays} />
+      </div>
+
+      {/* History table */}
+      {allDays.length > 0 && (
+        <div className="mb-8 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+          <p className="border-b border-neutral-100 px-5 py-3 text-xs font-medium uppercase tracking-wider text-neutral-400 dark:border-neutral-800 dark:text-neutral-600">
+            History
+          </p>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-neutral-100 dark:border-neutral-800">
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-neutral-400 dark:text-neutral-600">
+                  Date
+                </th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-neutral-400 dark:text-neutral-600">
+                  Answered
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...allDays].reverse().map((d) => (
+                <tr
+                  key={d.date}
+                  className="border-b border-neutral-50 last:border-0 dark:border-neutral-800/50"
+                >
+                  <td className="px-5 py-2.5 text-neutral-700 dark:text-neutral-300">
+                    {formatDate(d.date)}
+                    {d.date === today && (
+                      <span className="ml-2 rounded-full bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
+                        Today
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-5 py-2.5 text-right text-neutral-500 dark:text-neutral-400">
+                    {d.total}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Category filter — horizontal scroll on mobile */}
       <div className="mb-4 flex gap-2 overflow-x-auto pb-1">

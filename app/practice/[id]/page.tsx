@@ -5,8 +5,18 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { allQuestions } from "@/content/questions/index";
 import QuestionCard from "@/components/QuestionCard";
-import { markQuestionSeen, toggleWeakQuestion, isQuestionWeak } from "@/lib/storage";
+import {
+  markQuestionSeen,
+  toggleWeakQuestion,
+  isQuestionWeak,
+  addPracticeAttempt,
+} from "@/lib/storage";
 import { shuffle } from "@/lib/shuffle";
+import { syncPracticeAttemptToSheets } from "@/lib/practice-sheets";
+
+function generateSessionId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
 
 function PracticeQuestionInner() {
   const params = useParams();
@@ -16,6 +26,7 @@ function PracticeQuestionInner() {
   const question = allQuestions.find((q) => q.id === id);
   const [isWeak, setIsWeak] = useState(false);
   const [sessionQueue, setSessionQueue] = useState<string[]>([]);
+  const [sessionId] = useState(generateSessionId);
 
   useEffect(() => {
     if (question) {
@@ -42,6 +53,16 @@ function PracticeQuestionInner() {
   function handleMarkWeak() {
     const next = toggleWeakQuestion(question!.id);
     setIsWeak(next);
+  }
+
+  function handleReveal() {
+    const attempt = {
+      questionId: question!.id,
+      timestamp: Date.now(),
+      sessionId,
+    };
+    addPracticeAttempt(attempt);
+    void syncPracticeAttemptToSheets(attempt);
   }
 
   function navigateNext() {
@@ -73,6 +94,7 @@ function PracticeQuestionInner() {
         onMarkWeak={handleMarkWeak}
         onNext={navigateNext}
         onSkip={navigateNext}
+        onReveal={handleReveal}
       />
     </div>
   );

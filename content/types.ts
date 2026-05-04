@@ -126,6 +126,12 @@ export type QuizRepetitionState = {
   lastSeen: string;
 };
 
+export type PracticeAttempt = {
+  questionId: string;
+  timestamp: number;
+  sessionId: string;
+};
+
 export type InterviewQuestionType = "intro" | "cv-probe" | "star" | "what-if" | "outro";
 
 export type InterviewQuestion = {
