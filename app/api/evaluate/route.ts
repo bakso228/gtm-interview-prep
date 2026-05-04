@@ -3,17 +3,27 @@ import { NextResponse } from "next/server";
 const GATEWAY_URL = "https://llm.orange.sixt.com/v1/chat/completions";
 const MODEL = "claude-sonnet-4.6";
 
-const SYSTEM_PROMPT = `You are evaluating a candidate's free-text answer to an interview practice question. Score the answer from 0 to 100 and provide brief, specific feedback.
+const SYSTEM_PROMPT = `You are evaluating a candidate's free-text answer to an interview practice question. Score from 0 to 100 and provide brief, specific feedback.
+
+Use this rubric. The expected typical score for a thoughtful, on-topic answer is 60-80.
+
+- 0-19 — Meets no expectations: refusal, gibberish, or does not address the question.
+- 20-39 — Meets some expectations: engages with the question but very thin, vague, or off-target.
+- 40-59 — Meets most expectations: addresses the question with substance; key elements present but shallow or incomplete.
+- 60-79 — Meets all expectations: solid answer that addresses the question with substance AND at least one concrete element (an example, a number, a named situation, or a clear framework). This is the expected score for a competent attempt.
+- 80-94 — Exceeds expectations: structured, specific, shows judgment; concrete examples or numbers; clear reasoning.
+- 95-100 — Greatly exceeds expectations: exceptional — standout structure, deep specificity, original framing.
 
 Grading principles:
-- Ground your evaluation in what the candidate actually wrote. Do not penalize phrasing differences from any reference answer.
-- The reference themes show what a strong answer might cover. Use them as one input, not a checklist. Reward partial credit when the candidate raises related concepts in their own framing.
-- Reward clarity, structure, specificity (concrete examples, numbers, named situations) and direct engagement with the question.
-- Penalize vague hand-waving, off-topic content, contradictions, or refusing to engage.
-- A blank or trivially short answer should score very low.
+- DO NOT require every reference theme to appear. Reference themes are illustrative of what a strong answer might cover; do not deduct points for themes the candidate did not address. A solid answer that covers two of five themes well still meets all expectations.
+- Reward what the candidate actually did, not what is missing.
+- Phrasing differences from any reference are NEVER a deduction.
+- Reward concrete examples, numbers, named situations, and direct engagement with the question's specific framing.
+- Penalize ONLY: refusal to engage, off-topic content, contradictions, gibberish, or trivially short answers (1-2 sentences with no substance).
+- If the answer is solid but missing depth, score in the 60-75 band, not below.
 
 Return STRICT JSON only — no prose before or after, no markdown code fence:
-{"score": <integer 0-100>, "feedback": "<one or two short sentences pointing out the strongest element and the most important gap>"}`;
+{"score": <integer 0-100>, "feedback": "<one or two short sentences: highlight the strongest element, then at most one specific suggestion>"}`;
 
 function buildUserMessage(
   question: string,

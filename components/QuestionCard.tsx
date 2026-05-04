@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Question } from "@/content/types";
 import { QUESTION_CATEGORY_LABELS } from "@/content/types";
+import { scoreTier } from "@/lib/practice-scores";
 import { clsx } from "clsx";
 
 export type EvaluateResult =
@@ -159,15 +160,13 @@ export default function QuestionCard({
       {/* Eval result */}
       {evalResult && evalResult.ok && (
         <div className="rounded-lg border border-indigo-200 bg-indigo-50/50 p-5 dark:border-indigo-800 dark:bg-indigo-950/30">
-          <div className="mb-2 flex items-baseline gap-3">
-            <p className="text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
-              Score
-            </p>
-            <p className="text-2xl font-semibold text-indigo-700 tabular-nums dark:text-indigo-300">
-              {evalResult.score}
-              <span className="text-sm font-normal text-indigo-500 dark:text-indigo-400">/100</span>
-            </p>
-          </div>
+          <p className="mb-1 text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+            {scoreTier(evalResult.score)}
+          </p>
+          <p className="mb-3 text-2xl font-semibold text-indigo-700 tabular-nums dark:text-indigo-300">
+            {evalResult.score}
+            <span className="text-sm font-normal text-indigo-500 dark:text-indigo-400">/100</span>
+          </p>
           <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
             {evalResult.feedback}
           </p>
