@@ -28,7 +28,7 @@ export function PracticeDayChart({ days }: { days: PracticeDayCount[] }) {
   const data = days.slice(-30);
   const n = data.length;
   const maxCount = Math.max(...data.map((d) => d.total), 1);
-  const ticks = [0, Math.ceil(maxCount / 2), maxCount];
+  const ticks = [...new Set([0, Math.ceil(maxCount / 2), maxCount])];
 
   function yAt(count: number): number {
     return P.top + (1 - count / maxCount) * PH;
