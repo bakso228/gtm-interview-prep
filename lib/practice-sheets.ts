@@ -23,13 +23,23 @@ export async function fetchPracticeAttemptsFromSheets(): Promise<PracticeAttempt
     if (!data.ok || !Array.isArray(data.attempts)) return [];
     return data.attempts
       .filter((row: Record<string, unknown>) => row.questionId)
-      .map(
-        (row: Record<string, unknown>): PracticeAttempt => ({
+      .map((row: Record<string, unknown>): PracticeAttempt => {
+        const rawScore = row.score;
+        const score =
+          rawScore === "" || rawScore === null || rawScore === undefined
+            ? undefined
+            : Number(rawScore);
+        const feedback = row.feedback ? String(row.feedback) : undefined;
+        const answer = row.answer ? String(row.answer) : undefined;
+        return {
           questionId: String(row.questionId ?? ""),
           timestamp: Number(row.timestamp ?? 0),
           sessionId: String(row.sessionId ?? ""),
-        })
-      );
+          ...(score !== undefined && Number.isFinite(score) ? { score } : {}),
+          ...(feedback ? { feedback } : {}),
+          ...(answer ? { answer } : {}),
+        };
+      });
   } catch {
     return [];
   }

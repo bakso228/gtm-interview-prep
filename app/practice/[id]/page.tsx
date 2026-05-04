@@ -1,10 +1,10 @@
 "use client";
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { allQuestions } from "@/content/questions/index";
-import QuestionCard from "@/components/QuestionCard";
+import QuestionCard, { type EvaluateResult } from "@/components/QuestionCard";
 import {
   markQuestionSeen,
   toggleWeakQuestion,
@@ -13,6 +13,7 @@ import {
 } from "@/lib/storage";
 import { shuffle } from "@/lib/shuffle";
 import { syncPracticeAttemptToSheets } from "@/lib/practice-sheets";
+import type { PracticeAttempt } from "@/content/types";
 
 function generateSessionId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -27,11 +28,13 @@ function PracticeQuestionInner() {
   const [isWeak, setIsWeak] = useState(false);
   const [sessionQueue, setSessionQueue] = useState<string[]>([]);
   const [sessionId] = useState(generateSessionId);
+  const loggedRef = useRef(false);
 
   useEffect(() => {
     if (question) {
       markQuestionSeen(question.id);
       setIsWeak(isQuestionWeak(question.id));
+      loggedRef.current = false;
       // Build a session queue from all questions if not already set
       if (sessionQueue.length === 0) {
         setSessionQueue(shuffle(allQuestions).map((q) => q.id));
@@ -55,14 +58,45 @@ function PracticeQuestionInner() {
     setIsWeak(next);
   }
 
-  function handleReveal() {
-    const attempt = {
+  function logAttempt(extra: Partial<PracticeAttempt>) {
+    if (loggedRef.current) return;
+    loggedRef.current = true;
+    const attempt: PracticeAttempt = {
       questionId: question!.id,
       timestamp: Date.now(),
       sessionId,
+      ...extra,
     };
     addPracticeAttempt(attempt);
     void syncPracticeAttemptToSheets(attempt);
+  }
+
+  function handleReveal(answer: string) {
+    const trimmed = answer.trim();
+    logAttempt(trimmed ? { answer: trimmed } : {});
+  }
+
+  async function handleEvaluate(answer: string): Promise<EvaluateResult> {
+    if (!question) return { ok: false, error: "no question" };
+    try {
+      const res = await fetch("/api/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: question.prompt,
+          idealAnswerThemes: question.idealAnswerThemes,
+          answer,
+        }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        return { ok: false, error: data.error ?? "unknown error" };
+      }
+      logAttempt({ score: data.score, feedback: data.feedback, answer: answer.trim() });
+      return { ok: true, score: data.score, feedback: data.feedback };
+    } catch (err) {
+      return { ok: false, error: String(err) };
+    }
   }
 
   function navigateNext() {
@@ -95,6 +129,7 @@ function PracticeQuestionInner() {
         onNext={navigateNext}
         onSkip={navigateNext}
         onReveal={handleReveal}
+        onEvaluate={handleEvaluate}
       />
     </div>
   );

@@ -5,6 +5,10 @@ import type { Question } from "@/content/types";
 import { QUESTION_CATEGORY_LABELS } from "@/content/types";
 import { clsx } from "clsx";
 
+export type EvaluateResult =
+  | { ok: true; score: number; feedback: string }
+  | { ok: false; error: string };
+
 export default function QuestionCard({
   question,
   isWeak,
@@ -12,6 +16,7 @@ export default function QuestionCard({
   onNext,
   onSkip,
   onReveal,
+  onEvaluate,
   sessionProgress,
 }: {
   question: Question;
@@ -19,28 +24,49 @@ export default function QuestionCard({
   onMarkWeak: () => void;
   onNext: () => void;
   onSkip: () => void;
-  onReveal?: () => void;
+  onReveal?: (answer: string) => void;
+  onEvaluate?: (answer: string) => Promise<EvaluateResult>;
   sessionProgress?: { current: number; total: number };
 }) {
   const [answer, setAnswer] = useState("");
   const [revealed, setRevealed] = useState(false);
+  const [evalLoading, setEvalLoading] = useState(false);
+  const [evalResult, setEvalResult] = useState<EvaluateResult | null>(null);
 
   function handleReveal() {
     setRevealed(true);
-    onReveal?.();
+    onReveal?.(answer);
   }
 
   function handleNext() {
     setAnswer("");
     setRevealed(false);
+    setEvalResult(null);
+    setEvalLoading(false);
     onNext();
   }
 
   function handleSkip() {
     setAnswer("");
     setRevealed(false);
+    setEvalResult(null);
+    setEvalLoading(false);
     onSkip();
   }
+
+  async function handleEvaluate() {
+    if (!onEvaluate || !answer.trim() || evalLoading) return;
+    setEvalLoading(true);
+    setEvalResult(null);
+    try {
+      const result = await onEvaluate(answer);
+      setEvalResult(result);
+    } finally {
+      setEvalLoading(false);
+    }
+  }
+
+  const canEvaluate = !!onEvaluate && answer.trim().length > 0 && !evalLoading;
 
   return (
     <div className="flex flex-col gap-6">
@@ -102,6 +128,15 @@ export default function QuestionCard({
             Next Question
           </button>
         )}
+        {onEvaluate && (
+          <button
+            onClick={handleEvaluate}
+            disabled={!canEvaluate}
+            className="rounded-lg border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:border-indigo-500 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 dark:hover:border-indigo-500 dark:hover:bg-indigo-900"
+          >
+            {evalLoading ? "Scoring…" : "Get Feedback"}
+          </button>
+        )}
         <button
           onClick={onMarkWeak}
           className={clsx(
@@ -120,6 +155,29 @@ export default function QuestionCard({
           Skip
         </button>
       </div>
+
+      {/* Eval result */}
+      {evalResult && evalResult.ok && (
+        <div className="rounded-lg border border-indigo-200 bg-indigo-50/50 p-5 dark:border-indigo-800 dark:bg-indigo-950/30">
+          <div className="mb-2 flex items-baseline gap-3">
+            <p className="text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+              Score
+            </p>
+            <p className="text-2xl font-semibold text-indigo-700 tabular-nums dark:text-indigo-300">
+              {evalResult.score}
+              <span className="text-sm font-normal text-indigo-500 dark:text-indigo-400">/100</span>
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
+            {evalResult.feedback}
+          </p>
+        </div>
+      )}
+      {evalResult && !evalResult.ok && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300">
+          Couldn't get feedback: {evalResult.error}
+        </div>
+      )}
 
       {/* Ideal answer reveal */}
       {revealed && (

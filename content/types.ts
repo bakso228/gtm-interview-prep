@@ -130,6 +130,9 @@ export type PracticeAttempt = {
   questionId: string;
   timestamp: number;
   sessionId: string;
+  score?: number;
+  feedback?: string;
+  answer?: string;
 };
 
 export type InterviewQuestionType = "intro" | "cv-probe" | "star" | "what-if" | "outro";
