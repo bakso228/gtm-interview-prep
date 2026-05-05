@@ -38,9 +38,9 @@ const speakingNotes: SpeakingNote[] = [
     title: "Why Anthropic?",
     titleDe: "Warum Anthropic?",
     paragraphs: [
-      "Like many I'm following the rise of LLMs for a while, but it was about a year ago — on a plane with no entertainment except a 6-hour Lex Fridman interview with Dario on my phone — that I really got into it. I didn't make it through all six hours, but **I was struck by the safety and trust approach** Dario laid out. It felt like the first time I'd heard someone in this space talk about **the risks as seriously as the upside**.",
-      "What stuck with me is that **Anthropic is structured around the mission**, not the other way around. It's a **research organization first**, and the commercial engine exists to fund that research. The **Public Benefit Corporation structure** and the **Long-Term Benefit Trust** aren't just governance — they're a real attempt to avoid what happened at companies like Facebook, where commercial pressure gradually erodes the original intent.",
-      "That said, I'm not naive about the tension. Anthropic is under massive commercial pressure, and the recent changes to the **Responsible Scaling Policy** show navigating growth and mission isn't easy. But I'd rather work on that problem than optimize revenue for another SaaS company where the stakes don't matter.",
+      "So I really got into Anthropic and understanding how it differs from OpenAI around a year ago, when I was stuck on a plane with nothing else to watch than a 6-hour podcast between Dario and Lex Fridman. I didn't make it through all of it, but I was struck by the **safety and trust approach** Dario laid out. It felt like the first time I'd heard someone in this space talk about the **risks as seriously as the upside**.",
+      "I understand now that **Anthropic is structured around the research mission**, not the other way around. It's a research organization first, and the commercial engine exists to fund that research. The **Public Benefit Corporation structure** and the **Long-Term Benefit Trust** aren't just governance — it's a credible approach, and a deliberate contrast to somewhere like Facebook, where commercial pressure gradually erodes the original intent.",
+      "That said, I'm **not naive** about the tension. There is massive commercial pressure, and the recent changes to the Responsible Scaling Policy show that navigating growth and mission isn't easy. But I'd rather work on that problem than optimize revenue for another SaaS company that is replaceable.",
     ],
     paragraphsDe: [],
   },
