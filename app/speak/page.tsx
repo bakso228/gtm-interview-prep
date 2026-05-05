@@ -119,12 +119,7 @@ export default function SpeakPage() {
                 {paragraphs.map((para, i) => (
                   <p
                     key={i}
-                    className={clsx(
-                      "leading-relaxed text-neutral-700 dark:text-neutral-300",
-                      i === 0
-                        ? "text-lg font-medium text-neutral-900 dark:text-neutral-100"
-                        : "text-base"
-                    )}
+                    className="text-base leading-relaxed text-neutral-700 dark:text-neutral-300"
                   >
                     {renderHighlights(para)}
                   </p>
