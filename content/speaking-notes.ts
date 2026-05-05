@@ -45,6 +45,19 @@ const speakingNotes: SpeakingNote[] = [
     paragraphsDe: [],
   },
   {
+    id: "why-anthropic-v2",
+    category: "Motivation",
+    categoryDe: "Motivation",
+    title: "Why Anthropic? (v2)",
+    titleDe: "Warum Anthropic? (v2)",
+    paragraphs: [
+      "For me it started about a year ago on a long flight with nothing to watch except a six-hour Lex Fridman podcast with Dario. Two things stuck with me.",
+      "The first is **structural**. I spent enough time at Facebook to see **how commercial pressure gradually erodes a company's original values**. What I find credible about Anthropic is that they've built guardrails against exactly that — the **Public Benefit Corporation**, the **Long-Term Benefit Trust** that can override commercial decisions. It's not just a mission statement, it's a mechanism.",
+      "The second point is more **personal**. Dario talks about holding both the unprecedented risks and the upside of AI simultaneously — like holding the share and the light. And the possible upside **isn't abstract to me**. I've had cancer touch my close circle, including my dad. And I've felt genuinely frustrated by how slowly the world has moved on something like that. The idea that AI — developed responsibly — could meaningfully accelerate progress on cancer research or drug discovery isn't just an interesting thesis for me. If I can contribute in whatever shape or form to that, it's an easy decision for me.",
+    ],
+    paragraphsDe: [],
+  },
+  {
     id: "why-this-role",
     category: "Motivation",
     categoryDe: "Motivation",
