@@ -17,10 +17,10 @@ const speakingNotes: SpeakingNote[] = [
     titleDe: "Karriere-Vorstellung",
     paragraphs: [
       "Three things define my background, and I think all three are relevant here.",
-      "First, I've spent most of my career in **B2B commercial roles and on the consumption-based SaaS business models** — enterprise deals with telcos and banks, long sales cycles, C-level business cases, multi-stakeholder relationships — I know how complex they can get.",
-      "Second, I've **built commercial infrastructure from scratch** — CRM, sales motion, pipeline, quota setting, playbooks. Both at scale inside Meta, and from zero at a B2B SaaS fintech called Smile ID.",
-      "Third, I understand **B2B demand generation and prioritization** — I've led marketing operations and B2B lead generation at Agoda and Sixt, directly feeding enterprise sales teams.",
-      "(1) GTM strategy, (2) sales operations, (3) demand generation — this role needs all three. That's what brought me here.",
+      "First, I've spent most of my career in **B2B commercial roles** — enterprise deals with telcos and banks, long sales cycles, multi-stakeholder buying committees, C-level business cases. At Facebook I was directly involved in valuation, deal analysis, and presenting to CXOs of major telcos across Emerging Markets. **I know how complex enterprise selling gets** and how GTM and RevOps functions can support them from the inside.",
+      "Second, I've **built commercial infrastructure from scratch** — sales motion, CRM, pipeline, quota setting, territory design, and variable comp. At Facebook my first team grew by 10x in 2 years, and at Smile ID, a B2B SaaS fintech where I took ARR from $1.5M to $6M. I'm comfortable with Salesforce and the analytics stack that sits around it.",
+      "Third, I'm **analytically driven**. Whether it was building elasticity and bidding models at Agoda, designing forecasting frameworks adopted across teams, or running performance analysis for multi-million euro campaigns — translating complex data into strategy and actionable decisions is something I've done consistently across roles.",
+      "(1) GTM strategy, (2) commercial infrastructure, and (3) analytical depth — this role needs all three. That's what brought me here.",
     ],
     paragraphsDe: [
       "Meine Karriere hatte drei Kapitel, und ich denke, alle drei sind relevant für das, was Sie suchen.",
