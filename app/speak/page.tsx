@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import speakingNotes from "@/content/speaking-notes";
 import { useLang } from "@/lib/language";
 import { clsx } from "clsx";
@@ -20,6 +20,70 @@ function renderHighlights(text: string) {
     }
     return <span key={i}>{part}</span>;
   });
+}
+
+function renderBlocks(paragraphs: string[]): ReactNode[] {
+  const blocks: ReactNode[] = [];
+  let i = 0;
+  while (i < paragraphs.length) {
+    const line = paragraphs[i];
+    if (line.startsWith("## ")) {
+      blocks.push(
+        <h2
+          key={i}
+          className="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+        >
+          {renderHighlights(line.slice(3))}
+        </h2>
+      );
+      i++;
+    } else if (line.startsWith("- ")) {
+      const items: string[] = [];
+      const start = i;
+      while (i < paragraphs.length && paragraphs[i].startsWith("- ")) {
+        items.push(paragraphs[i].slice(2));
+        i++;
+      }
+      blocks.push(
+        <ul
+          key={start}
+          className="list-disc space-y-2 pl-5 text-base leading-relaxed text-neutral-700 dark:text-neutral-300"
+        >
+          {items.map((it, j) => (
+            <li key={j}>{renderHighlights(it)}</li>
+          ))}
+        </ul>
+      );
+    } else if (/^\d+\.\s/.test(line)) {
+      const items: string[] = [];
+      const start = i;
+      while (i < paragraphs.length && /^\d+\.\s/.test(paragraphs[i])) {
+        items.push(paragraphs[i].replace(/^\d+\.\s/, ""));
+        i++;
+      }
+      blocks.push(
+        <ol
+          key={start}
+          className="list-decimal space-y-2 pl-5 text-base leading-relaxed text-neutral-700 dark:text-neutral-300"
+        >
+          {items.map((it, j) => (
+            <li key={j}>{renderHighlights(it)}</li>
+          ))}
+        </ol>
+      );
+    } else {
+      blocks.push(
+        <p
+          key={i}
+          className="text-base leading-relaxed text-neutral-700 dark:text-neutral-300"
+        >
+          {renderHighlights(line)}
+        </p>
+      );
+      i++;
+    }
+  }
+  return blocks;
 }
 
 export default function SpeakPage() {
@@ -115,20 +179,17 @@ export default function SpeakPage() {
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-5">
-                {paragraphs.map((para, i) => (
-                  <p
-                    key={i}
-                    className="text-base leading-relaxed text-neutral-700 dark:text-neutral-300"
-                  >
-                    {renderHighlights(para)}
-                  </p>
-                ))}
-              </div>
+              <div className="space-y-5">{renderBlocks(paragraphs)}</div>
 
               {/* Word count hint */}
               <p className="mt-8 text-xs text-neutral-300 dark:text-neutral-700">
-                {paragraphs.join(" ").replace(/\*\*/g, "").split(/\s+/).length} {lang === "de" ? "Wörter" : "words"}
+                {paragraphs
+                  .map((p) => p.replace(/^(##|###|-|\d+\.)\s/, ""))
+                  .join(" ")
+                  .replace(/\*\*/g, "")
+                  .split(/\s+/)
+                  .filter(Boolean).length}{" "}
+                {lang === "de" ? "Wörter" : "words"}
               </p>
             </article>
           )}
