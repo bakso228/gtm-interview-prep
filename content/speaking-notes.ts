@@ -16,12 +16,11 @@ const speakingNotes: SpeakingNote[] = [
     title: "Career Introduction",
     titleDe: "Karriere-Vorstellung",
     paragraphs: [
-      "My career has had three chapters, and I think all three are relevant to what you're looking for.",
-      "I started at Facebook in a Sales Ops & Planning role when the team was 10 people and left when we were over a hundred. I was in the engine room during that scaling phase — headcount planning, book-of-business creation, CRM rollout, sales programs through call centers. That's where I built my foundation in how commercial organizations are structured and how they grow.",
-      "From there I moved into a more strategic GTM role, eventually based in Singapore, where I worked on some of Meta's most complex partnership deals in Emerging Markets — telcos, long sales cycles, C-level presentations, business cases, playbooks. I also built a regional 'Insights as a Service' program that became a core part of how we structured those partnerships. That's where I learned that the best GTM work isn't just operational — it creates actual value for the customer.",
-      "After 10 years in big tech I was ready for something smaller and faster. At Smile ID I owned the full commercial and growth function — sales motion, pipeline, CRM, quota setting, battle cards — built largely from scratch.",
-      "Then personal circumstances brought me back to Asia, and I spent the last few years leading performance marketing and B2B lead generation at Agoda and Sixt, which is a different muscle but the same underlying question: how do you generate qualified demand efficiently and turn it into revenue.",
-      "What brings me here is that this role sits exactly at the intersection of everything I've done — GTM strategy, sales operations, cross-functional execution — but at a company that I think is building something genuinely important. That combination doesn't come up often.",
+      "Three things define my background, and I think all three are relevant here.",
+      "First, I've spent most of my career in B2B commercial roles and on the consumption-based SaaS business models — enterprise deals with telcos and banks, long sales cycles, C-level business cases, multi-stakeholder relationships — I know how complex they can get.",
+      "Second, I've built commercial infrastructure from scratch — CRM, sales motion, pipeline, quota setting, playbooks. Both at scale inside Meta, and from zero at a B2B SaaS fintech called Smile ID.",
+      "Third, I understand B2B demand generation and prioritization — I've led marketing operations and B2B lead generation at Agoda and Sixt, directly feeding enterprise sales teams.",
+      "GTM strategy, sales operations, demand generation — this role needs all three. That's what brought me here.",
     ],
     paragraphsDe: [
       "Meine Karriere hatte drei Kapitel, und ich denke, alle drei sind relevant für das, was Sie suchen.",
@@ -31,6 +30,34 @@ const speakingNotes: SpeakingNote[] = [
       "Dann haben mich persönliche Umstände nach Asien zurückgebracht, und ich habe die letzten Jahre damit verbracht, Performance Marketing und B2B-Lead-Generierung bei Agoda und Sixt zu leiten — ein anderer Muskel, aber dieselbe grundlegende Frage: Wie generiert man qualifizierte Nachfrage effizient und wandelt sie in Umsatz um.",
       "Was mich hierher bringt, ist dass diese Rolle genau an der Schnittstelle von allem liegt, was ich getan habe — GTM-Strategie, Sales Operations, funktionsübergreifende Umsetzung — aber bei einem Unternehmen, das meiner Meinung nach etwas wirklich Bedeutendes aufbaut. Diese Kombination ergibt sich nicht oft.",
     ],
+  },
+  {
+    id: "why-anthropic",
+    category: "Motivation",
+    categoryDe: "Motivation",
+    title: "Why Anthropic?",
+    titleDe: "Warum Anthropic?",
+    paragraphs: [
+      "Obviously I've been following the rise of LLMs and how they're changing work and daily life for a while now. But it was about a year ago when I found myself on a plane with no entertainment except a 6-hour Lex Fridman interview with Dario on my phone. I didn't make it through all six hours, but I was genuinely struck by the **safety and trust approach** Dario laid out — it felt like the first time I'd heard someone in this space talk about **the risks as seriously as the upside**.",
+      "What stuck with me is that Anthropic is structured around the mission, not the other way around. It's a **research organization first**, and the commercial engine exists to fund that research and prove the approach is viable. The **Public Benefit Corporation structure** and the **Long-Term Benefit Trust** aren't just governance — they're a real attempt to avoid what happened at companies like Facebook, where commercial pressure gradually erodes the original intent.",
+      "All that said, I'm not naive about the tension. Anthropic is under massive commercial pressure right now, and the recent changes to the **Responsible Scaling Policy** show that navigating growth and mission isn't easy. But I'd rather work on that problem — building a GTM motion that funds the mission without compromising it — than optimize revenue for another SaaS company where the stakes don't matter. That's what brought me here.",
+    ],
+    paragraphsDe: [],
+  },
+  {
+    id: "why-this-role",
+    category: "Motivation",
+    categoryDe: "Motivation",
+    title: "Why this role?",
+    titleDe: "Warum diese Rolle?",
+    paragraphs: [
+      "The honest answer is that I've thought about what I want this next chapter to look like, and three things matter to me.",
+      "First, the work. This role sits at the **intersection of GTM skills** — and that combination is where I've done my best work. Given the team size and the stage Anthropic is in — high-growth and high-ambiguity — I think you're not just looking for a pure operations player. That plays to my skills.",
+      "Second, I want the work to matter. I'm not interested in optimizing GTM for another SaaS product nobody will remember in five years. At Anthropic, the commercial work directly funds the research, and those learnings will persist.",
+      "Third, the market. **DACH is where I started** my career and where I want to continue it — but inside an international company that keeps my **multi-cultural DNA** alive. I'm in Munich for good now, and this role fits that picture exactly.",
+      "So: (1) right work, (2) mission that matters, (3) DACH Market",
+    ],
+    paragraphsDe: [],
   },
 ];
 

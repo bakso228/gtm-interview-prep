@@ -5,6 +5,23 @@ import speakingNotes from "@/content/speaking-notes";
 import { useLang } from "@/lib/language";
 import { clsx } from "clsx";
 
+function renderHighlights(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <mark
+          key={i}
+          className="rounded bg-amber-100 px-1 font-medium text-neutral-900 dark:bg-amber-900/40 dark:text-amber-100"
+        >
+          {part.slice(2, -2)}
+        </mark>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default function SpeakPage() {
   const { lang } = useLang();
   const [activeId, setActiveId] = useState(speakingNotes[0]?.id ?? null);
@@ -109,14 +126,14 @@ export default function SpeakPage() {
                         : "text-base"
                     )}
                   >
-                    {para}
+                    {renderHighlights(para)}
                   </p>
                 ))}
               </div>
 
               {/* Word count hint */}
               <p className="mt-8 text-xs text-neutral-300 dark:text-neutral-700">
-                {paragraphs.join(" ").split(/\s+/).length} {lang === "de" ? "Wörter" : "words"}
+                {paragraphs.join(" ").replace(/\*\*/g, "").split(/\s+/).length} {lang === "de" ? "Wörter" : "words"}
               </p>
             </article>
           )}
