@@ -17,10 +17,10 @@ const speakingNotes: SpeakingNote[] = [
     titleDe: "Karriere-Vorstellung",
     paragraphs: [
       "Three things define my background, and I think all three are relevant here.",
-      "First, I've spent most of my career in B2B commercial roles and on the consumption-based SaaS business models — enterprise deals with telcos and banks, long sales cycles, C-level business cases, multi-stakeholder relationships — I know how complex they can get.",
-      "Second, I've built commercial infrastructure from scratch — CRM, sales motion, pipeline, quota setting, playbooks. Both at scale inside Meta, and from zero at a B2B SaaS fintech called Smile ID.",
-      "Third, I understand B2B demand generation and prioritization — I've led marketing operations and B2B lead generation at Agoda and Sixt, directly feeding enterprise sales teams.",
-      "GTM strategy, sales operations, demand generation — this role needs all three. That's what brought me here.",
+      "First, I've spent most of my career in **B2B commercial roles and on the consumption-based SaaS business models** — enterprise deals with telcos and banks, long sales cycles, C-level business cases, multi-stakeholder relationships — I know how complex they can get.",
+      "Second, I've **built commercial infrastructure from scratch** — CRM, sales motion, pipeline, quota setting, playbooks. Both at scale inside Meta, and from zero at a B2B SaaS fintech called Smile ID.",
+      "Third, I understand **B2B demand generation and prioritization** — I've led marketing operations and B2B lead generation at Agoda and Sixt, directly feeding enterprise sales teams.",
+      "(1) GTM strategy, (2) sales operations, (3) demand generation — this role needs all three. That's what brought me here.",
     ],
     paragraphsDe: [
       "Meine Karriere hatte drei Kapitel, und ich denke, alle drei sind relevant für das, was Sie suchen.",
@@ -53,7 +53,7 @@ const speakingNotes: SpeakingNote[] = [
     paragraphs: [
       "The honest answer is that I've thought about what I want this next chapter to look like, and three things matter to me.",
       "First, the work. This role sits at the **intersection of GTM skills** — and that combination is where I've done my best work. Given the team size and the stage Anthropic is in — high-growth and high-ambiguity — I think you're not just looking for a pure operations player. That plays to my skills.",
-      "Second, I want the work to matter. I'm not interested in optimizing GTM for another SaaS product nobody will remember in five years. At Anthropic, the commercial work directly funds the research, and those learnings will persist.",
+      "Second, **I want the work to matter**. I'm not interested in optimizing GTM for another SaaS product nobody will remember in five years. At Anthropic, the commercial work directly funds the research, and those learnings will persist.",
       "Third, the market. **DACH is where I started** my career and where I want to continue it — but inside an international company that keeps my **multi-cultural DNA** alive. I'm in Munich for good now, and this role fits that picture exactly.",
       "So: (1) right work, (2) mission that matters, (3) DACH Market",
     ],
